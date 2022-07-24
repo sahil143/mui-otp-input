@@ -2,6 +2,7 @@
 > Component is in development phase
 
 A Simple One Time Password input component based on [Mui](https://github.com/mui/material-ui)
+<img width="325" alt="Screenshot 2022-07-24 at 9 31 09 PM" src="https://user-images.githubusercontent.com/9278015/180660211-a100fa24-0514-425e-a943-838b94eeb0f0.png">
 
 ## Commands
 
