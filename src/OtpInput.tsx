@@ -48,6 +48,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       case 'Delete': {
         event.preventDefault();
         changeValue(changeValueAtActiveIndex(''));
+        break;
       }
       default:
         break;
