@@ -13,6 +13,8 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
+    "install:app": "cd ./example && yarn install --no-lockfile",
+    "start:app": "cd ./example && yarn start",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
