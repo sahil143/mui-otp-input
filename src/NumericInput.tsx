@@ -25,8 +25,14 @@ const Input = styled(MuiInput)({
   '& > input': {
     textAlign: 'center',
   },
+  '& > input[type=number]': {
+    '-moz-appearance': 'textfield',
+  },
+  '& > input[type=number]::-webkit-outer-spin-button,': {
+    '-webkit-appearance': 'none',
+  },
   '& > input[type=number]::-webkit-inner-spin-button': { 
-    '-webkit-appearance': 'none'
+    '-webkit-appearance': 'none',
   }
 });
 
