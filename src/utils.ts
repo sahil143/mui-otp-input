@@ -41,6 +41,6 @@ export const getFormattedInputValue = (value: string, format: string): (string |
       inputValueIndex++;
       return inputValue[inputValueIndex - 1];
     }
-    return inputValue[inputValueIndex - 1] ? iv : undefined;
+    return inputValue[inputValueIndex] ? iv : undefined;
   });
 };
