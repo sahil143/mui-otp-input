@@ -10,7 +10,7 @@ type NumericInputProps = {
   isSecure?: boolean;
   isDisabled?: boolean;
   onChange: (value: string) => void;
-  onInputPaste: () => void;
+  onInputPaste: React.ClipboardEventHandler<HTMLInputElement>;
   onInputFocus: (
     event: React.FocusEvent<HTMLInputElement>,
     index: number

@@ -30,7 +30,18 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     getInputValueFromFormattedValue,
   } = useInputFormat(format, value);
 
-  const changeValue = (newValue: string) => onChange(getInputValueFromFormattedValue(newValue), newValue);
+  const otpLength = React.useMemo(() => {
+    let length = 0;
+    for (const input of inputFormat) {
+      if (input === INPUT_SYMBOL) {
+        length++;
+      }
+    }
+    return length;
+  }, [inputFormat]);
+
+  const changeValue = (newValue: string) =>
+    onChange(getInputValueFromFormattedValue(newValue), newValue);
 
   const handleChange = (val: string) => {
     changeValue(changeValueAtActiveIndex(val));
@@ -55,11 +66,12 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     }
   };
 
-  /**
-   * [TODO]: Implment handle paste
-   */
-  const handlePaste = React.useCallback(() => {}, []);
-
+  const handlePaste = (event: React.ClipboardEvent) => {
+    const pastedOtp = event.clipboardData
+      ?.getData('text/plain')
+      .slice(0, otpLength - activeIndex);
+    changeValue(value + pastedOtp);
+  };
 
   return (
     <>

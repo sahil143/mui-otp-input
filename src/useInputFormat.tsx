@@ -65,7 +65,7 @@ export const useInputFormat = (format: string, value: string) => {
 
   if (!format.includes('_')) {
     throw new Error(
-      'Format must contain "_" because it represents and input field, e.g. "__/__/____"'
+      'Format must contain "_" because it represents an input field, e.g. "__/__/____"'
     );
   }
 
