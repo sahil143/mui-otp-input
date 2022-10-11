@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { InputIndexSymbols } from './type';
 import {
   getFormattedInputValue,
   getNextInputIndex,
-  InputIndexSymbols,
   INPUT_SYMBOL,
 } from './utils';
 
@@ -15,29 +15,14 @@ export const useInputFormat = (format: string, value: string) => {
 
   activeIndexRef.current = activeIndex;
 
-  const inputFormat = format.split('');
   const inputFormattedValueRef = React.useRef(
     getFormattedInputValue(value, format)
   );
 
   inputFormattedValueRef.current = getFormattedInputValue(value, format);
 
-  const formattingCharacters = format.replace(/_/g, '');
-
-  const getInputValueFromFormattedValue = (
-    formattedValue: string | string[]
-  ): string => {
-    const tempFormattedValue =
-      formattedValue instanceof Array
-        ? formattedValue
-        : formattedValue.split('');
-    return tempFormattedValue
-      .map(iv => (!formattingCharacters.includes(iv) ? iv : ''))
-      .join('');
-  };
-
-  const changeValueAtActiveIndex = (value: string) => {
-    const newInputValue = [...inputFormattedValueRef.current];
+  const changeValueAtActiveIndex = (value: string):string => {
+    const newInputValue = inputFormattedValueRef.current.split('');
     newInputValue[activeIndexRef.current] = value;
     return newInputValue.join('');
   };
@@ -45,14 +30,14 @@ export const useInputFormat = (format: string, value: string) => {
   const nextActiveInputIndex = React.useCallback(
     (symbol: InputIndexSymbols) => {
       setActiveIndex(i => {
-        const nextIndex = getNextInputIndex(inputFormat, i, symbol);
+        const nextIndex = getNextInputIndex(format, i, symbol);
         if (nextIndex !== null) {
           return nextIndex;
         }
         return i;
       });
     },
-    [inputFormat]
+    [format]
   );
 
   const onInputFocus = React.useCallback(
@@ -70,12 +55,11 @@ export const useInputFormat = (format: string, value: string) => {
   }
 
   return {
-    inputFormat,
+    inputFormat: format.split(''),
     inputFormattedValue: inputFormattedValueRef.current,
     activeIndex,
     onInputFocus,
     nextActiveInputIndex,
     changeValueAtActiveIndex,
-    getInputValueFromFormattedValue,
   };
 };

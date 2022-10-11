@@ -1,6 +1,7 @@
 import { Input as MuiInput, styled } from '@mui/material';
 import * as React from 'react';
-import { OTPInputType, OTPType, TypeRegExp } from './utils';
+import { OTPInputType, OTPType } from './type';
+import { TypeRegExp } from './utils';
 
 type NumericInputProps = {
   value: string;

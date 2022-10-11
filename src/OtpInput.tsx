@@ -1,15 +1,19 @@
 import * as React from 'react';
 import NumericInput from './NumericInput';
+import { FormattedOtpInputValue, OtpInputFormat, OTPInputType, OtpInputValue } from './type';
 import { useInputFormat } from './useInputFormat';
-import { INPUT_SYMBOL, OTPInputType } from './utils';
+import {
+  getInputValueFromFormattedValue,
+  INPUT_SYMBOL,
+} from './utils';
 
 type OtpInputProps = {
-  format: string;
-  value: string;
+  format: OtpInputFormat;
+  value: OtpInputValue;
   type?: OTPInputType;
   isSecure?: boolean;
   isDisabled?: boolean;
-  onChange: (value: string, formattedValue: string) => void;
+  onChange: (value: OtpInputValue, formattedValue: FormattedOtpInputValue) => void;
 };
 
 export const OtpInput: React.FC<OtpInputProps> = ({
@@ -27,7 +31,6 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     onInputFocus,
     nextActiveInputIndex,
     changeValueAtActiveIndex,
-    getInputValueFromFormattedValue,
   } = useInputFormat(format, value);
 
   const otpLength = React.useMemo(() => {
@@ -40,8 +43,8 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     return length;
   }, [inputFormat]);
 
-  const changeValue = (newValue: string) =>
-    onChange(getInputValueFromFormattedValue(newValue), newValue);
+  const changeValue = (newValue: FormattedOtpInputValue) =>
+    onChange(getInputValueFromFormattedValue(newValue, format), newValue);
 
   const handleChange = (val: string) => {
     changeValue(changeValueAtActiveIndex(val));
@@ -52,13 +55,13 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     switch (event.key) {
       case 'Backspace': {
         event.preventDefault();
-        changeValue(changeValueAtActiveIndex(''));
+        changeValue(changeValueAtActiveIndex(INPUT_SYMBOL));
         nextActiveInputIndex(-1);
         break;
       }
       case 'Delete': {
         event.preventDefault();
-        changeValue(changeValueAtActiveIndex(''));
+        changeValue(changeValueAtActiveIndex(INPUT_SYMBOL));
         break;
       }
       default:
@@ -69,6 +72,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   const handlePaste = (event: React.ClipboardEvent) => {
     const pastedOtp = event.clipboardData
       ?.getData('text/plain')
+      // [TODO] get correct active index for the input value
       .slice(0, otpLength - activeIndex);
     changeValue(value + pastedOtp);
   };
@@ -84,7 +88,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
               type={type}
               isSecure={isSecure}
               isDisabled={isDisabled}
-              value={inputFormattedValue[index] ?? ''}
+              value={
+                inputFormattedValue[index] !== INPUT_SYMBOL
+                  ? inputFormattedValue[index]
+                  : ''
+              }
               focus={activeIndex === index}
               onKeyDown={handleKeyDown}
               onInputPaste={handlePaste}
