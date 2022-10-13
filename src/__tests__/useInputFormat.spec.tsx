@@ -79,14 +79,14 @@ describe('useInputFormat tests', () => {
       HTMLInputElement
     >;
     const { result, rerender } = renderHook<{ value?: string }, UseInputFormat>(
-      ({ value }) => useInputFormat('_-_-_-_', value ?? ''), {
-        initialProps: {}
+      ({ value }) => useInputFormat('_-_-_-_', value ?? ''),
+      {
+        initialProps: {},
       }
     );
     expect(result.error).toBeUndefined();
     expect(result.current.activeIndex).toEqual(0);
     expect(result.current.inputFormat).toEqual('_-_-_-_'.split(''));
-    expect;
     act(() => {
       result.current.nextActiveInputIndex(+1);
     });
@@ -102,8 +102,16 @@ describe('useInputFormat tests', () => {
 
   it('should throw error for invalid input format', () => {
     const { result } = renderHook(() => useInputFormat('-----', ''));
-    expect(result.error).toEqual(Error('Format must contain "_" because it represents an input field, e.g. "__/__/____"'))
+    expect(result.error).toEqual(
+      Error(
+        'Format must contain "_" because it represents an input field, e.g. "__/__/____"'
+      )
+    );
     const { result: result2 } = renderHook(() => useInputFormat('-/--/--', ''));
-    expect(result2.error).toEqual(Error('Format must contain "_" because it represents an input field, e.g. "__/__/____"'))
-  })
+    expect(result2.error).toEqual(
+      Error(
+        'Format must contain "_" because it represents an input field, e.g. "__/__/____"'
+      )
+    );
+  });
 });

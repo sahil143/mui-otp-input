@@ -62,7 +62,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
         onChange(val[0]);
       }
     },
-    [type]
+    [type, onChange]
   );
 
   return (

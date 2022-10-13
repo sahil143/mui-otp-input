@@ -1,11 +1,13 @@
 import * as React from 'react';
 import NumericInput from './NumericInput';
-import { FormattedOtpInputValue, OtpInputFormat, OTPInputType, OtpInputValue } from './type';
-import { useInputFormat } from './useInputFormat';
 import {
-  getInputValueFromFormattedValue,
-  INPUT_SYMBOL,
-} from './utils';
+  FormattedOtpInputValue,
+  OtpInputFormat,
+  OTPInputType,
+  OtpInputValue,
+} from './type';
+import { useInputFormat } from './useInputFormat';
+import { getInputValueFromFormattedValue, INPUT_SYMBOL } from './utils';
 
 type OtpInputProps = {
   format: OtpInputFormat;
@@ -13,7 +15,10 @@ type OtpInputProps = {
   type?: OTPInputType;
   isSecure?: boolean;
   isDisabled?: boolean;
-  onChange: (value: OtpInputValue, formattedValue: FormattedOtpInputValue) => void;
+  onChange: (
+    value: OtpInputValue,
+    formattedValue: FormattedOtpInputValue
+  ) => void;
 };
 
 export const OtpInput: React.FC<OtpInputProps> = ({
@@ -72,7 +77,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   const handlePaste = (event: React.ClipboardEvent) => {
     const pastedOtp = event.clipboardData
       ?.getData('text/plain')
-      // [TODO] get correct active index for the input value
+      // [TODO][BUG] get correct active index for the input value, add tests for onPaste
       .slice(0, otpLength - activeIndex);
     changeValue(value + pastedOtp);
   };
@@ -96,7 +101,9 @@ export const OtpInput: React.FC<OtpInputProps> = ({
               onKeyDown={handleKeyDown}
               onInputPaste={handlePaste}
               onChange={handleChange}
-              onInputFocus={(event: React.FocusEvent<HTMLInputElement>) => onInputFocus(event, index)}
+              onInputFocus={(event: React.FocusEvent<HTMLInputElement>) =>
+                onInputFocus(event, index)
+              }
             />
           );
         }

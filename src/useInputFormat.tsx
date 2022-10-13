@@ -21,7 +21,7 @@ export type UseInputFormat = {
   ) => void;
   nextActiveInputIndex: (symbol: InputIndexSymbols) => void;
   changeValueAtActiveIndex: (value: string) => FormattedOtpInputValue;
-}
+};
 
 export const useInputFormat = (
   format: OtpInputFormat,

@@ -187,6 +187,8 @@ describe('OtpInput tests', () => {
     screen.getAllByTestId<HTMLInputElement>('otp-input').forEach(inp => {
       expect(inp.disabled).toEqual(true);
     });
-    expect(document.activeElement).not.toBe(screen.getAllByTestId<HTMLInputElement>('otp-input')[0])
-  })
+    expect(document.activeElement).not.toBe(
+      screen.getAllByTestId<HTMLInputElement>('otp-input')[0]
+    );
+  });
 });

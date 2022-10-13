@@ -12,5 +12,5 @@ export enum InputIndexSymbols {
 
 // type aliases for better readability
 export type FormattedOtpInputValue = string; // example: 12/06/2022
-export type OtpInputValue = string;          // example: 12062022
-export type OtpInputFormat = string;         // example: __/__/____
+export type OtpInputValue = string; // example: 12062022
+export type OtpInputFormat = string; // example: __/__/____

@@ -40,7 +40,7 @@ describe('utils tests', () => {
   });
 
   describe('getInputValueFromFormattedValue', () => {
-    it('should return input values from the formatted values',  () => {
+    it('should return input values from the formatted values', () => {
       expect(getInputValueFromFormattedValue('12-34-56', '__-__-__')).toEqual(
         '123456'
       );
@@ -50,8 +50,13 @@ describe('utils tests', () => {
       expect(
         getInputValueFromFormattedValue('/1/2-b//r5/', '/_/_-_//__/')
       ).toEqual('12br5');
-      expect(getInputValueFromFormattedValue('12345', '_____')).toEqual('12345');
-      expect(getInputValueFromFormattedValue('/1/2-b//__/', '/_/_-_//__/')).toEqual('12b');
-    })
+
+      expect(getInputValueFromFormattedValue('12345', '_____')).toEqual(
+        '12345'
+      );
+      expect(
+        getInputValueFromFormattedValue('/1/2-b//__/', '/_/_-_//__/')
+      ).toEqual('12b');
+    });
   });
 });
