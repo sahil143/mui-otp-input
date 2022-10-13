@@ -38,7 +38,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
   focus,
   type,
   isSecure = false,
-  isDisabled,
+  isDisabled = false,
   onChange,
   onKeyDown,
   onInputPaste,

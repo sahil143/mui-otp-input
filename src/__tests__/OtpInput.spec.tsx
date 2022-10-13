@@ -229,7 +229,7 @@ describe('OtpInput tests', () => {
     expect(document.activeElement).toBe(
       screen.getAllByTestId<HTMLInputElement>('otp-input')[2]
     );
-    
+
     // focus should remain on current input
     fireEvent.keyDown(document.activeElement || document.body, {
       key: 'Delete',
