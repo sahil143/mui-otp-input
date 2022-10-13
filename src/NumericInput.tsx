@@ -6,16 +6,12 @@ import { TypeRegExp } from './utils';
 type NumericInputProps = {
   value: string;
   focus: boolean;
-  index: number;
   type: OTPInputType;
   isSecure?: boolean;
   isDisabled?: boolean;
   onChange: (value: string) => void;
   onInputPaste: React.ClipboardEventHandler<HTMLInputElement>;
-  onInputFocus: (
-    event: React.FocusEvent<HTMLInputElement>,
-    index: number
-  ) => void;
+  onInputFocus: (event: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
@@ -27,20 +23,19 @@ const Input = styled(MuiInput)({
     textAlign: 'center',
   },
   '& > input[type=number]': {
-    '-moz-appearance': 'textfield',
+    MozAppearance: 'textfield',
   },
   '& > input[type=number]::-webkit-outer-spin-button,': {
-    '-webkit-appearance': 'none',
+    WebkitAppearance: 'none',
   },
-  '& > input[type=number]::-webkit-inner-spin-button': { 
-    '-webkit-appearance': 'none',
-  }
+  '& > input[type=number]::-webkit-inner-spin-button': {
+    WebkitAppearance: 'none',
+  },
 });
 
 const NumericInput: React.FC<NumericInputProps> = ({
   value,
   focus,
-  index,
   type,
   isSecure = false,
   isDisabled,
@@ -64,15 +59,10 @@ const NumericInput: React.FC<NumericInputProps> = ({
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const val = event.target.value;
       if (TypeRegExp[type].test(val[0])) {
-      onChange(val[0]);
+        onChange(val[0]);
       }
     },
     [type]
-  );
-
-  const handleFocus = React.useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => onInputFocus(event, index),
-    [index]
   );
 
   return (
@@ -84,8 +74,8 @@ const NumericInput: React.FC<NumericInputProps> = ({
       onKeyDown={onKeyDown}
       onChange={handleChange}
       onPaste={onInputPaste}
-      onFocus={handleFocus}
-      inputProps={{ maxLength: 1 }}
+      onFocus={onInputFocus}
+      inputProps={{ maxLength: 1, 'data-testid': 'otp-input' }}
     />
   );
 };

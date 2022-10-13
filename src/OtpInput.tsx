@@ -84,7 +84,6 @@ export const OtpInput: React.FC<OtpInputProps> = ({
           return (
             <NumericInput
               key={index}
-              index={index}
               type={type}
               isSecure={isSecure}
               isDisabled={isDisabled}
@@ -97,7 +96,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
               onKeyDown={handleKeyDown}
               onInputPaste={handlePaste}
               onChange={handleChange}
-              onInputFocus={onInputFocus}
+              onInputFocus={(event: React.FocusEvent<HTMLInputElement>) => onInputFocus(event, index)}
             />
           );
         }
