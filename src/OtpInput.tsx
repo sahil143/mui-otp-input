@@ -108,7 +108,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
           );
         }
 
-        return <span key={index}>{item}</span>;
+        return <span key={index} data-testid="otp-seperator">{item}</span>;
       })}
     </>
   );

@@ -13,6 +13,12 @@ describe('OtpInput tests', () => {
     expect(screen.getAllByTestId('otp-input')).toHaveLength(4);
   });
 
+  it('should render seperator and input based on the format', () => {
+    render(<OtpInput format="__-__/__" value="" onChange={() => {}} />);
+    expect(screen.getAllByTestId('otp-input')).toHaveLength(6);
+    expect(screen.getAllByTestId('otp-seperator')).toHaveLength(2);
+  });
+
   it('should have single digit values in each input', () => {
     render(<OtpInput format="__-__" value="12" onChange={() => {}} />);
     expect(screen.getAllByTestId('otp-input')).toHaveLength(4);
@@ -189,6 +195,52 @@ describe('OtpInput tests', () => {
     });
     expect(document.activeElement).not.toBe(
       screen.getAllByTestId<HTMLInputElement>('otp-input')[0]
+    );
+  });
+
+  it('should delete value in input and jump focus to prev input on backspace/delete', () => {
+    // mock window.getSelection https://stackoverflow.com/questions/43677034/enzyme-jest-window-getselection-does-not-work/63064633#63064633
+    window.getSelection = (() => {
+      return {
+        removeAllRanges: () => {},
+      };
+    }) as any;
+
+    let value = '1234';
+    let formattedValue = '12-34';
+    const onChange = jest.fn((v, f) => {
+      value = v;
+      formattedValue = f;
+    });
+    const { rerender } = render(
+      <OtpInput format="__-__" value={value} onChange={onChange} />
+    );
+
+    fireEvent.focus(screen.getAllByTestId('otp-input')[3]);
+
+    fireEvent.keyDown(document.activeElement || document.body, {
+      key: 'Backspace',
+    });
+    rerender(<OtpInput format="__-__" value={value} onChange={onChange} />);
+
+    expect(onChange).toHaveBeenCalled();
+    expect(value).toEqual('123');
+    expect(formattedValue).toEqual('12-3_');
+    expect(document.activeElement).toBe(
+      screen.getAllByTestId<HTMLInputElement>('otp-input')[2]
+    );
+    
+    // focus should remain on current input
+    fireEvent.keyDown(document.activeElement || document.body, {
+      key: 'Delete',
+    });
+    rerender(<OtpInput format="__-__" value={value} onChange={onChange} />);
+
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(value).toEqual('12');
+    expect(formattedValue).toEqual('12-__');
+    expect(document.activeElement).toBe(
+      screen.getAllByTestId<HTMLInputElement>('otp-input')[2]
     );
   });
 });
