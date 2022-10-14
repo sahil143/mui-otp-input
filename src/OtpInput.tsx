@@ -7,7 +7,11 @@ import {
   OtpInputValue,
 } from './type';
 import { useInputFormat } from './useInputFormat';
-import { getInputValueFromFormattedValue, INPUT_SYMBOL } from './utils';
+import {
+  getFormattedInputValue,
+  getInputValueFromFormattedValue,
+  INPUT_SYMBOL,
+} from './utils';
 
 type OtpInputProps = {
   format: OtpInputFormat;
@@ -39,17 +43,25 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   } = useInputFormat(format, value);
 
   const otpLength = React.useMemo(() => {
-    let length = 0;
-    for (const input of inputFormat) {
-      if (input === INPUT_SYMBOL) {
-        length++;
-      }
-    }
-    return length;
-  }, [inputFormat]);
+    return format.match(new RegExp('_', 'g'))?.length;
+  }, [inputFormat, format]);
 
-  const changeValue = (newValue: FormattedOtpInputValue) =>
-    onChange(getInputValueFromFormattedValue(newValue, format), newValue);
+  const changeValue = React.useCallback(
+    (
+      newValue: FormattedOtpInputValue | OtpInputValue,
+      isFormatted: boolean = true
+    ) =>
+      isFormatted
+        ? onChange(
+            getInputValueFromFormattedValue(newValue, format),
+            newValue as FormattedOtpInputValue
+          )
+        : onChange(
+            newValue as OtpInputValue,
+            getFormattedInputValue(newValue, format)
+          ),
+    [onChange, format]
+  );
 
   const handleChange = (val: string) => {
     changeValue(changeValueAtActiveIndex(val));
@@ -75,11 +87,24 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   };
 
   const handlePaste = (event: React.ClipboardEvent) => {
+    const currentInputIndex = inputFormat
+      .slice(0, activeIndex + 1)
+      .join('')
+      .match(new RegExp('_', 'g'))?.length;
     const pastedOtp = event.clipboardData
       ?.getData('text/plain')
-      // [TODO][BUG] get correct active index for the input value, add tests for onPaste
-      .slice(0, otpLength - activeIndex);
-    changeValue(value + pastedOtp);
+      .slice(
+        0,
+        otpLength && currentInputIndex
+          ? otpLength - (currentInputIndex - 1)
+          : undefined
+      );
+    const slicedValue = value.slice(
+      0,
+      currentInputIndex ? currentInputIndex - 1 : undefined
+    );
+    const newValue = slicedValue + pastedOtp;
+    changeValue(newValue, false);
   };
 
   return (

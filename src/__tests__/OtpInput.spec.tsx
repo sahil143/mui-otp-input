@@ -243,4 +243,41 @@ describe('OtpInput tests', () => {
       screen.getAllByTestId<HTMLInputElement>('otp-input')[2]
     );
   });
+
+  it('should paste values in each input', () => {
+    let value = '';
+    let formattedValue = '';
+    const onChange = jest.fn((v, f) => {
+      value = v;
+      formattedValue = f;
+    });
+    const { rerender } = render(
+      <OtpInput format="__-__" value={value} onChange={onChange} />
+    );
+
+    fireEvent.paste(screen.getAllByTestId('otp-input')[0], {
+      clipboardData: { getData: () => '1234' },
+    });
+    rerender(<OtpInput format="__-__" value={value} onChange={onChange} />);
+
+    expect(onChange).toHaveBeenCalled();
+    expect(value).toEqual('1234');
+    expect(formattedValue).toEqual('12-34');
+    '1234'
+      .split('')
+      .forEach((v, i) =>
+        expect(
+          screen.getAllByTestId<HTMLInputElement>('otp-input')[i].value
+        ).toEqual(v)
+      );
+
+    fireEvent.focus(screen.getAllByTestId('otp-input')[2]);
+    fireEvent.paste(document.activeElement || document.body, {
+      clipboardData: { getData: () => '4321' },
+    });
+
+    expect(onChange).toHaveBeenCalled();
+    expect(value).toEqual('1243');
+    expect(formattedValue).toEqual('12-43');
+  });
 });
