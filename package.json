@@ -4,8 +4,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=10"
@@ -15,11 +14,10 @@
     "build": "tsdx build",
     "install:app": "cd ./example && yarn install --no-lockfile",
     "start:app": "cd ./example && yarn start",
-    "test": "tsdx test --passWithNoTests",
+    "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
+    "size": "size-limit"
   },
   "peerDependencies": {
     "@mui/material": ">=5",
